@@ -13,6 +13,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/kenshaw/snaker"
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 	"github.com/xo/xo/internal"
@@ -348,12 +349,17 @@ func (ts *Set) Post(ctx context.Context, mode string) {
 func (ts *Set) Dump(out string) {
 	var files []string
 	for file := range ts.files {
-		files = append(files, file)
+		switch file {
+		case "db.xo.go", "sf_generateulid.go", "schema_migration.go":
+			continue
+		default:
+			files = append(files, file)
+		}
 	}
 	sort.Strings(files)
 	for _, file := range files {
 		buf := ts.files[file].Buf.Bytes()
-		if err := os.WriteFile(filepath.Join(out, file), buf, 0o644); err != nil {
+		if err := os.WriteFile(filepath.Join(out, snaker.CamelToSnakeIdentifier(ts.files[file].Template[1].SortName)+".go"), buf, 0o644); err != nil {
 			ts.files[file].Err = append(ts.files[file].Err, err)
 		}
 	}

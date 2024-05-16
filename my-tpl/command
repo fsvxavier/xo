@@ -1,0 +1,1 @@
+xo schema --src my-tpl -o models2 $DB_URL

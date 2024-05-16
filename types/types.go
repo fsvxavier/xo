@@ -75,6 +75,7 @@ type Proc struct {
 	ID         string  `json:"-"`
 	Type       string  `json:"type,omitempty"` // 'procedure' or 'function'
 	Name       string  `json:"name,omitempty"`
+	FileName   string  `json:"file_name,omitempty"`
 	Params     []Field `json:"params,omitempty"`
 	Returns    []Field `json:"return,omitempty"`
 	Void       bool    `json:"void,omitempty"`
@@ -92,6 +93,7 @@ func (p Proc) MarshalYAML() (interface{}, error) {
 type Table struct {
 	Type        string       `json:"type,omitempty"` // 'table' or 'view'
 	Name        string       `json:"name,omitempty"`
+	FileName    string       `json:"file_name,omitempty"`
 	Columns     []Field      `json:"columns,omitempty"`
 	PrimaryKeys []Field      `json:"primary_keys,omitempty"`
 	Indexes     []Index      `json:"indexes,omitempty"`
@@ -110,6 +112,7 @@ func (t Table) MarshalYAML() (interface{}, error) {
 // Index is a index.
 type Index struct {
 	Name      string  `json:"name,omitempty"`
+	FileName  string  `json:"file_name,omitempty"`
 	Fields    []Field `json:"fields,omitempty"`
 	IsUnique  bool    `json:"is_unique,omitempty"`
 	IsPrimary bool    `json:"is_primary,omitempty"`
@@ -118,7 +121,8 @@ type Index struct {
 
 // ForeignKey is a foreign key.
 type ForeignKey struct {
-	Name      string  `json:"name,omitempty"`       // constraint name
+	Name      string  `json:"name,omitempty"` // constraint name
+	FileName  string  `json:"file_name,omitempty"`
 	Fields    []Field `json:"column,omitempty"`     // column that has the key on it
 	RefTable  string  `json:"ref_table,omitempty"`  // table the foreign key refers to
 	RefFields []Field `json:"ref_column,omitempty"` // column in ref table the index refers to
@@ -129,6 +133,7 @@ type ForeignKey struct {
 // Field is a column, index, enum value, or stored procedure parameter.
 type Field struct {
 	Name        string `json:"name,omitempty"`
+	FileName    string `json:"file_name,omitempty"`
 	Type        Type   `json:"datatype,omitempty"`
 	Default     string `json:"default,omitempty"`
 	IsPrimary   bool   `json:"is_primary,omitempty"`
